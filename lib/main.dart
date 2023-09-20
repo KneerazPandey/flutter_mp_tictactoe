@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mp_tictactoe/core/core.dart';
-import 'package:flutter_mp_tictactoe/screens/main_menu_screen.dart';
+import 'package:flutter_mp_tictactoe/screens/screens.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: bgColor,
       ),
-      home: const MainMenuScreen(),
+      routes: <String, Widget Function(BuildContext)>{
+        MainMenuScreen.routeName: (BuildContext context) =>
+            const MainMenuScreen(),
+        CreateRoomScreen.routeName: (BuildContext context) =>
+            const CreateRoomScreen(),
+        JoinRoomScreen.routeName: (BuildContext context) =>
+            const JoinRoomScreen(),
+      },
+      initialRoute: MainMenuScreen.routeName,
     );
   }
 }
