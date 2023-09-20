@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
         JoinRoomScreen.routeName: (BuildContext context) =>
             const JoinRoomScreen(),
       },
+      debugShowCheckedModeBanner: false,
       initialRoute: MainMenuScreen.routeName,
     );
   }
