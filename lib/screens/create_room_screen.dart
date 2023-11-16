@@ -22,6 +22,7 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
   void initState() {
     nickNameController = TextEditingController();
     super.initState();
+    socketMethods.createRoomSuccessListener(context);
   }
 
   @override

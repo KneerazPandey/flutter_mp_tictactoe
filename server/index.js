@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
+import Room from "./models/room.js";
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -13,16 +14,28 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
-  
+  console.log("Socket Connected successfully");
 
-  socket.on('createRoom', async ({nickname}) => {
-    console.log('Nickname from mobile: ', nickname);
-    //? Create room -  Server Side
-    //? Store player in the room - Server Side
-    //? Take player to next screen - Client Side
+  socket.on("createRoom", async ({ nickname }) => {
+    try {
+      let player = {
+        nickname: nickname,
+        socketID: socket.id,
+        playerType: "X",
+      };
+      var room = new Room();
+      room.players.push(player);
+      room.turn = player;
+      const savedRoom = await room.save();
+      const roomID = savedRoom._id.toString();
+
+      socket.join(roomID);
+
+      io.to(roomID).emit('createRoomSuccess', room);
+    } catch (error) {
+      console.log(error);
+    }
   });
-
 });
 
 server.listen(PORT, async () => {
