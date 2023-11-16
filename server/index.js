@@ -14,9 +14,15 @@ const io = new Server(server);
 
 io.on("connection", (socket) => {
   console.log("a user connected");
-  socket.on("disconnect", () => {
-    console.log("user disconnected");
+  
+
+  socket.on('createRoom', async ({nickname}) => {
+    console.log('Nickname from mobile: ', nickname);
+    //? Create room -  Server Side
+    //? Store player in the room - Server Side
+    //? Take player to next screen - Client Side
   });
+
 });
 
 server.listen(PORT, async () => {
