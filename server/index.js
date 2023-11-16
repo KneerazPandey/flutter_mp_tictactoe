@@ -31,7 +31,40 @@ io.on("connection", (socket) => {
 
       socket.join(roomID);
 
-      io.to(roomID).emit('createRoomSuccess', room);
+      io.to(roomID).emit("createRoomSuccess", room);
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  socket.on("joinRoom", async ({ nickname, roomId }) => {
+    try {
+      if (!roomId.match(/^[0-9a-fA-F]{24}$/)) {
+        socket.emit("errorOccured", "Please enter a valid room ID");
+        return;
+      }
+      let room = await Room.findById(roomId);
+      if (!room) {
+        socket.emit("errorOccured", "Please enter a valid room ID");
+        return;
+      }
+
+      if (room.isJoin) {
+        const player = {
+          nickname: nickname,
+          playerType: "O",
+          socketID: socket.id,
+        };
+        room.players.push(player);
+        const joinedRoom = await room.save();
+        socket.join(roomId);
+        io.to(roomID).emit("joinRoomSuccess", joinedRoom);
+      } else {
+        return socket.emit(
+          "errorOccured",
+          "Game is in progress. Try again later"
+        );
+      }
     } catch (error) {
       console.log(error);
     }
