@@ -62,7 +62,7 @@ io.on("connection", (socket) => {
       } else {
         return socket.emit(
           "errorOccured",
-          "Game is in progress. Try again later"
+          "Game is in progress. Please Try again later"
         );
       }
     } catch (error) {
